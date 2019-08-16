@@ -3,7 +3,6 @@ import {
   bundle,
   bundler,
   assertBundles,
-  assertBundleTree,
   removeDistDirectory,
   distDir,
   getNextBuild,
