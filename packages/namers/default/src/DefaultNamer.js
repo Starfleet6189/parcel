@@ -119,7 +119,7 @@ function nameFromContent(bundle: Bundle, rootDir: FilePath): string {
       name = path.basename(entryFilePath);
     }
 
-    return name;
+    return name || 'bundle';
   }
 }
 

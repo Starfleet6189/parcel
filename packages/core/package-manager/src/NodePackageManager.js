@@ -27,26 +27,40 @@ import ThrowableDiagnostic, {
 import bundlerDefault from '@parcel/bundler-default';
 import namerDefault from '@parcel/namer-default';
 import optimizerTerser from '@parcel/optimizer-terser';
+import packagerCss from '@parcel/packager-css';
+import packagerHtml from '@parcel/packager-html';
 import packagerJs from '@parcel/packager-js';
 import packagerRaw from '@parcel/packager-raw';
 import reporterJson from '@parcel/reporter-json';
 import resolverDefault from '@parcel/resolver-default';
 import runtimeJs from '@parcel/runtime-js';
 import transformerBabel from '@parcel/transformer-babel';
-import transformerJS from '@parcel/transformer-js';
+import transformerCss from '@parcel/transformer-css';
+import transformerHtml from '@parcel/transformer-html';
+import transformerJs from '@parcel/transformer-js';
+import transformerJson from '@parcel/transformer-json';
+import transformerPostcss from '@parcel/transformer-postcss';
+import transformerPosthtml from '@parcel/transformer-posthtml';
 import transformerRaw from '@parcel/transformer-raw';
 
 const BUILTINS = {
   '@parcel/bundler-default': bundlerDefault,
   '@parcel/namer-default': namerDefault,
   '@parcel/optimizer-terser': optimizerTerser,
+  '@parcel/packager-css': packagerCss,
+  '@parcel/packager-html': packagerHtml,
   '@parcel/packager-js': packagerJs,
   '@parcel/packager-raw': packagerRaw,
   '@parcel/reporter-json': reporterJson,
   '@parcel/resolver-default': resolverDefault,
   '@parcel/runtime-js': runtimeJs,
   '@parcel/transformer-babel': transformerBabel,
-  '@parcel/transformer-js': transformerJS,
+  '@parcel/transformer-css': transformerCss,
+  '@parcel/transformer-html': transformerHtml,
+  '@parcel/transformer-js': transformerJs,
+  '@parcel/transformer-json': transformerJson,
+  '@parcel/transformer-postcss': transformerPostcss,
+  '@parcel/transformer-posthtml': transformerPosthtml,
   '@parcel/transformer-raw': transformerRaw,
 };
 

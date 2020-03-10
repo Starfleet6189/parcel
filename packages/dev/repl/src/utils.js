@@ -96,10 +96,10 @@ export const PRESETS = {
       name: '.babelrc',
       content: `{ "presets": [["@babel/env", {"loose": false}]] }`,
     },
-    {
-      name: 'package.json',
-      content: `{\n "devDependencies": {\n  "@babel/core": "^7.3.4",\n  "@babel/preset-env": "^7.3.4"\n  }\n}`,
-    },
+    // {
+    //   name: 'package.json',
+    //   content: `{\n "devDependencies": {\n  "@babel/core": "^7.3.4",\n  "@babel/preset-env": "^7.3.4"\n  }\n}`,
+    // },
   ],
   'Basic Page': [
     {
@@ -162,63 +162,62 @@ document.body.append(document.createTextNode(func()))`,
 
 let user = "Jane User";
 
-document.body.innerHTML = greeter(user);
-`,
+document.body.innerHTML = greeter(user);`,
       isEntry: true,
     },
   ],
-  Markdown: [
-    {
-      name: 'Article.md',
-      content: '# My Title\n\nHello, ...\n\n```js\nconsole.log("test");\n```\n',
-      isEntry: true,
-    },
-    {
-      name: '.htmlnanorc',
-      content: `{\n  minifySvg: false\n}`,
-    },
-  ],
-  SCSS: [
-    {
-      name: 'style.scss',
-      content: `$colorRed: red;
-#header {
-  margin: 0;
-  border: 1px solid $colorRed;
-  p {
-    color: $colorRed;
-    font: {
-      size: 12px;
-      weight: bold;
-    }
-  }
-  a {
-    text-decoration: none;
-  }
-}`,
-      isEntry: true,
-    },
-    {
-      name: 'cssnano.config.js',
-      content: `module.exports = {\n  preset: [\n    'default',\n    {\n      svgo: false\n    }\n  ]\n}`,
-    },
-  ],
-  LESS: [
-    {
-      name: 'style.less',
-      content: `@some-color: #143352;
+  //   Markdown: [
+  //     {
+  //       name: 'Article.md',
+  //       content: '# My Title\n\nHello, ...\n\n```js\nconsole.log("test");\n```\n',
+  //       isEntry: true,
+  //     },
+  //     {
+  //       name: '.htmlnanorc',
+  //       content: `{\n  minifySvg: false\n}`,
+  //     },
+  //   ],
+  //   SCSS: [
+  //     {
+  //       name: 'style.scss',
+  //       content: `$colorRed: red;
+  // #header {
+  //   margin: 0;
+  //   border: 1px solid $colorRed;
+  //   p {
+  //     color: $colorRed;
+  //     font: {
+  //       size: 12px;
+  //       weight: bold;
+  //     }
+  //   }
+  //   a {
+  //     text-decoration: none;
+  //   }
+  // }`,
+  //       isEntry: true,
+  //     },
+  //     {
+  //       name: 'cssnano.config.js',
+  //       content: `module.exports = {\n  preset: [\n    'default',\n    {\n      svgo: false\n    }\n  ]\n}`,
+  //     },
+  //   ],
+  //   LESS: [
+  //     {
+  //       name: 'style.less',
+  //       content: `@some-color: #143352;
 
-#header {
-  background-color: @some-color;
-}
-h2 {
-  color: @some-color;
-}`,
-      isEntry: true,
-    },
-    {
-      name: 'cssnano.config.js',
-      content: `module.exports = {\n  preset: [\n    'default',\n    {\n      svgo: false\n    }\n  ]\n}`,
-    },
-  ],
+  // #header {
+  //   background-color: @some-color;
+  // }
+  // h2 {
+  //   color: @some-color;
+  // }`,
+  //       isEntry: true,
+  //     },
+  //     {
+  //       name: 'cssnano.config.js',
+  //       content: `module.exports = {\n  preset: [\n    'default',\n    {\n      svgo: false\n    }\n  ]\n}`,
+  //     },
+  //   ],
 };

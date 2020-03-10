@@ -43,7 +43,7 @@ function assetsReducer(assets, action) {
   } else if (action.type === 'updateAsset') {
     const {name, prop, value} = action;
     if (prop === 'name' && assets.find(a => a.name === value)) {
-      return assets;
+      return [...assets];
     } else {
       if (prop === 'content')
         assets = updateAssets(assets, name, 'time', Date.now());
@@ -238,7 +238,7 @@ function App() {
     [],
   );
 
-  const addAssetCb = useCallback(() => assets(assetsReducer.add()), []);
+  const addAssetCb = useCallback(() => setAssets(assetsReducer.add()), []);
 
   const changeOptionsCb = useCallback(
     (name, value) => setOptions(optionsReducer.update(name, value)),

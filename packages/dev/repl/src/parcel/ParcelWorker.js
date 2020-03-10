@@ -18,6 +18,12 @@ const defaultConfig = {
       '@parcel/transformer-babel',
       '@parcel/transformer-js',
     ],
+    '*.{json,json5}': ['@parcel/transformer-json'],
+    '*.{htm,html}': [
+      '@parcel/transformer-posthtml',
+      '@parcel/transformer-html',
+    ],
+    '*.css': ['@parcel/transformer-postcss', '@parcel/transformer-css'],
     'url:*': ['@parcel/transformer-raw'],
   },
   namers: ['@parcel/namer-default'],
@@ -31,6 +37,8 @@ const defaultConfig = {
     '*.js': ['@parcel/optimizer-terser'],
   },
   packagers: {
+    '*.html': '@parcel/packager-html',
+    '*.css': '@parcel/packager-css',
     '*.js': '@parcel/packager-js',
     '*': '@parcel/packager-raw',
   },
@@ -103,6 +111,7 @@ async function bundle(assets, options) {
     inputFS: fs,
     outputFS: fs,
     patchConsole: false,
+    publicUrl: options.publicUrl,
     scopeHoist: options.scopeHoist,
     workerFarm,
     // packageManager: new NodePackageManager(
