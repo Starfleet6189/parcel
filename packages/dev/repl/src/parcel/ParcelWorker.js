@@ -5,10 +5,9 @@ import {expose} from 'comlink';
 import Parcel from '@parcel/core';
 // import SimplePackageInstaller from './SimplePackageInstaller';
 // import {NodePackageManager} from '@parcel/package-manager';
-// import defaultConfig from '@parcel/config-default';
+// import {prettifyTime} from '@parcel/utils';
 import memFS from 'fs';
 import workerFarm from '../../workerFarm.js';
-// import {prettifyTime} from '@parcel/utils';
 import {getDefaultTargetEnv} from '../utils.js';
 
 const defaultConfig = {
@@ -96,7 +95,7 @@ async function bundle(assets, options) {
   let fs: MemoryFS = memFS;
 
   // TODO only create new instance if options/entries changed
-  let entries = assets.filter(v => v.isEntry).map(v => `/src/${v.name}`);
+  let entries = assets.filter(v => v.isEntry).map(v => `/${v.name}`);
   const b = new Parcel({
     entries,
     disableCache: true,
@@ -111,7 +110,7 @@ async function bundle(assets, options) {
     inputFS: fs,
     outputFS: fs,
     patchConsole: false,
-    publicUrl: options.publicUrl,
+    publicUrl: options.publicUrl || null,
     scopeHoist: options.scopeHoist,
     workerFarm,
     // packageManager: new NodePackageManager(
@@ -132,9 +131,9 @@ async function bundle(assets, options) {
   };
   await fs.writeFile('/package.json', JSON.stringify(packageJson));
 
-  await fs.mkdirp('/src');
+  await fs.mkdirp('/');
   for (let {name, content} of assets) {
-    await fs.writeFile(`/src/${name}`, content);
+    await fs.writeFile(`/${name}`, content);
   }
   await fs.rimraf(`/dist`);
 

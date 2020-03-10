@@ -19,17 +19,10 @@ export function isGlobMatch(filePath: FilePath, glob: Glob) {
   return isMatch(filePath, normalizePath(glob));
 }
 
-export function globSync(
-  p: FilePath,
-  options: FastGlobOptions<FilePath>,
-): Array<FilePath> {
-  return fastGlob.sync(normalizePath(p), options);
-}
-
 export function glob(
   p: FilePath,
   fs: FileSystem,
-  options: FastGlobOptions<FilePath>,
+  options: ?FastGlobOptions<FilePath>,
 ): Promise<Array<FilePath>> {
   // $FlowFixMe
   options = {
