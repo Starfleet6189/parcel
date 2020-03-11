@@ -1,4 +1,5 @@
 // @flow
+import type {WriteStream} from 'fs';
 import type {FileSystem} from './types';
 import type {FilePath} from '@parcel/types';
 import type {
@@ -20,6 +21,7 @@ import packageJSON from '../package.json';
 // require('fs').promises
 
 const realpath = promisify(fs.realpath);
+let writeStreamCalls = 0;
 
 export class NodeFS implements FileSystem {
   readFile = promisify(fs.readFile);
@@ -33,7 +35,6 @@ export class NodeFS implements FileSystem {
   rimraf = promisify(rimraf);
   ncp = promisify(ncp);
   createReadStream = fs.createReadStream;
-  createWriteStream = fs.createWriteStream;
   cwd = process.cwd;
   chdir = process.chdir;
 
@@ -41,6 +42,13 @@ export class NodeFS implements FileSystem {
   realpathSync = fs.realpathSync;
   existsSync = fs.existsSync;
   readdirSync = (fs.readdirSync: any);
+
+  createWriteStream(filePath: string, options: any): WriteStream {
+    let tmpFilePath = filePath + '.' + process.pid + '.' + writeStreamCalls++;
+    let stream = fs.createWriteStream(tmpFilePath, options);
+    stream.on('finish', () => fs.renameSync(tmpFilePath, filePath));
+    return stream;
+  }
 
   readFileSync(filePath: FilePath, encoding?: buffer$Encoding): any {
     if (encoding != null) {
