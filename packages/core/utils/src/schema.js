@@ -464,8 +464,7 @@ validateSchema.diagnostic = function(
       diagnostic: {
         message,
         origin,
-        // $FlowFixMe should be a sketchy string check
-        filePath: data.filePath,
+        filePath: data.filePath ?? undefined,
         language: 'json',
         codeFrame,
       },
