@@ -300,15 +300,14 @@ const WRAP_MODULE_VISITOR = {
           }
         }
       }
-    }
-
-    if (replace.length > 1) {
-      path.replaceWithMultiple(replace).forEach(p => p.skip());
-    } else if (replace.length == 1) {
-      path.replaceWith(replace[0]);
-      path.skip();
-    } else {
-      path.remove();
+      if (replace.length > 1) {
+        path.replaceWithMultiple(replace).forEach(p => p.skip());
+      } else if (replace.length == 1) {
+        path.replaceWith(replace[0]);
+        path.skip();
+      } else {
+        path.remove();
+      }
     }
   },
   Function(path) {
