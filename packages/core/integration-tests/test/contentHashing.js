@@ -1,6 +1,12 @@
 import assert from 'assert';
 import path from 'path';
-import {bundle as _bundle, overlayFS, outputFS, ncp} from '@parcel/test-utils';
+import {
+  bundle as _bundle,
+  distDir,
+  overlayFS,
+  outputFS,
+  ncp,
+} from '@parcel/test-utils';
 
 function bundle(path) {
   return _bundle(path, {
@@ -8,8 +14,6 @@ function bundle(path) {
     disableCache: false,
   });
 }
-
-const distDir = '/dist';
 
 describe('content hashing', function() {
   beforeEach(async () => {
