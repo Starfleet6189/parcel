@@ -1,7 +1,11 @@
-const cacheLoader = require('../../cacheLoader');
+const cacheLoader = require('../cacheLoader');
 
-module.exports = cacheLoader(function loadHTMLBundle(bundle) {
-  return fetch(bundle).then(function(res) {
-    return res.text();
-  });
+module.exports = cacheLoader(function loadHTMLBundle(bundles) {
+  return Promise.all(
+    bundles.map(bundle =>
+      fetch(bundle).then(function(res) {
+        return res.text();
+      }),
+    ),
+  );
 });

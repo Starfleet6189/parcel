@@ -10,7 +10,7 @@ import type {
 
 import assert from 'assert';
 import {Runtime} from '@parcel/plugin';
-import {relativeBundlePath} from '@parcel/utils';
+import {relativeBundlePath, DefaultMap} from '@parcel/utils';
 import path from 'path';
 import nullthrows from 'nullthrows';
 
@@ -134,39 +134,45 @@ export default new Runtime({
         externalBundles = externalBundles.slice(-1);
       }
 
-      let loaderModules = loaders
-        ? externalBundles
-            .map(to => {
-              let loader = loaders[to.type];
-              if (!loader) {
-                return;
-              }
+      let loaderModules = [];
+      let modulesToLoad = new DefaultMap<string, Array<string>>(() => []);
+      if (loaders) {
+        for (let to of externalBundles) {
+          let loader = loaders[to.type];
+          if (!loader) {
+            continue;
+          }
 
-              let relativePathExpr = getRelativePathExpr(bundle, to);
+          let relativePathExpr = getRelativePathExpr(bundle, to);
 
-              // Use esmodule loader if possible
-              if (to.type === 'js' && to.env.outputFormat === 'esmodule') {
-                if (!needsDynamicImportPolyfill) {
-                  return `import("./" + ${relativePathExpr})`;
-                }
+          // Use esmodule loader if possible
+          if (to.type === 'js' && to.env.outputFormat === 'esmodule') {
+            if (!needsDynamicImportPolyfill) {
+              loaderModules.push(`import("./" + ${relativePathExpr})`);
+            }
 
-                loader = nullthrows(
-                  loaders.IMPORT_POLYFILL,
-                  `No import() polyfill available for context '${bundle.env.context}'`,
-                );
-              } else if (
-                to.type === 'js' &&
-                to.env.outputFormat === 'commonjs'
-              ) {
-                return `Promise.resolve(require("./" + ${relativePathExpr}))`;
-              }
+            if (loaders.IMPORT_POLYFILL !== false) {
+              loader = nullthrows(
+                loaders.IMPORT_POLYFILL,
+                `No import() polyfill available for context '${bundle.env.context}'`,
+              );
+            }
+          } else if (to.type === 'js' && to.env.outputFormat === 'commonjs') {
+            loaderModules.push(
+              `Promise.resolve(require("./" + ${relativePathExpr}))`,
+            );
+          }
 
-              return `require(${JSON.stringify(
-                loader,
-              )})(require('./bundle-url').getBundleURL() + ${relativePathExpr})`;
-            })
-            .filter(Boolean)
-        : [];
+          let modulesToLoadType = modulesToLoad.get(loader);
+          modulesToLoadType.push(
+            `require('./loaders/bundle-url').getBundleURL() + ${relativePathExpr}`,
+          );
+        }
+      }
+
+      for (let [loader, urls] of modulesToLoad) {
+        loaderModules.push(`require("${loader}")([${urls.join(', ')}])`);
+      }
 
       if (loaderModules.length > 0) {
         let loaders = loaderModules.join(', ');
@@ -236,14 +242,14 @@ function getURLRuntime(
   if (dependency.meta.webworker === true) {
     return {
       filePath: __filename,
-      code: `module.exports = require('./get-worker-url')(${relativePathExpr});`,
+      code: `module.exports = require('./loaders/get-worker-url')(${relativePathExpr});`,
       dependency,
     };
   }
 
   return {
     filePath: __filename,
-    code: `module.exports = require('./bundle-url').getBundleURL() + ${relativePathExpr}`,
+    code: `module.exports = require('./loaders/bundle-url').getBundleURL() + ${relativePathExpr}`,
     dependency,
   };
 }
@@ -267,7 +273,7 @@ function getRegisterCode(
   }, entryBundle);
 
   return (
-    "require('./bundle-manifest').register(JSON.parse(" +
+    "require('./loaders/bundle-manifest').register(JSON.parse(" +
     JSON.stringify(JSON.stringify(idToName)) +
     '));'
   );
@@ -275,7 +281,7 @@ function getRegisterCode(
 
 function getRelativePathExpr(from: Bundle, to: Bundle): string {
   if (shouldUseRuntimeManifest(from)) {
-    return `require('./relative-path')(${JSON.stringify(
+    return `require('./loaders/relative-path')(${JSON.stringify(
       getPublicId(from.id),
     )}, ${JSON.stringify(getPublicId(to.id))})`;
   }

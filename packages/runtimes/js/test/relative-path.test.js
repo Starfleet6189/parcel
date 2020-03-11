@@ -1,7 +1,10 @@
 // @flow
 
 import assert from 'assert';
-import {_dirname as dirname, _relative as relative} from '../src/relative-path';
+import {
+  _dirname as dirname,
+  _relative as relative,
+} from '../src/loaders/relative-path';
 
 describe('relative-path', () => {
   describe('dirname', () => {
