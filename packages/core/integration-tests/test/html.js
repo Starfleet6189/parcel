@@ -996,7 +996,10 @@ describe('html', function() {
     subscription = await b.watch();
     await getNextBuild(b);
 
-    let html = await outputFS.readFile('/dist/index.html', 'utf8');
+    let html = await outputFS.readFile(
+      path.join(distDir, 'index.html'),
+      'utf8',
+    );
     assert(html.includes("console.log('test')"));
 
     await overlayFS.writeFile(
@@ -1005,7 +1008,7 @@ describe('html', function() {
     );
     await getNextBuild(b);
 
-    html = await outputFS.readFile('/dist/index.html', 'utf8');
+    html = await outputFS.readFile(path.join(distDir, 'index.html'), 'utf8');
     assert(html.includes('console.log("foo")'));
   });
 });
